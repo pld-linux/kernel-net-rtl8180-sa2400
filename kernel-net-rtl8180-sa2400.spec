@@ -74,10 +74,10 @@ for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}
 	touch include/config/MARKER
 	%{__make} -C %{_kernelsrcdir} clean \
 		RCS_FIND_IGNORE="-name '*.ko' -o" \
-		M=$PWD O=$PWD \
+		M=$PWD O=$PWD KSRC=$PWD\
 		%{?with_verbose:V=1}
 	%{__make} -C %{_kernelsrcdir} modules \
-		M=$PWD O=$PWD \
+		M=$PWD O=$PWD KSRC=$PWD\
 		%{?with_verbose:V=1}
 	for i in ieee80211-r8180 ieee80211_crypt-r8180 ieee80211_crypt_wep-r8180 \
 		r8180; do
