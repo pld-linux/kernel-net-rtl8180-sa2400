@@ -7,10 +7,10 @@
 #
 %define		_rtl8180_ver	0.21
 %define		_rtl8180_name	rtl8180
-%define		_rel		2
+%define		_rel		3
 Summary:	Linux driver for WLAN cards based on rtl8180
 Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych opartych na uk³adzie rtl8180
-Name:		kernel-net-rtl8180
+Name:		kernel-net-rtl8180-sa2400
 Version:	%{_rtl8180_ver}
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
