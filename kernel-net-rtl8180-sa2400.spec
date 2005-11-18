@@ -7,7 +7,7 @@
 #
 %define		_rtl8180_ver	0.21
 %define		_rtl8180_name	rtl8180
-%define		_rel		3
+%define		_rel		4
 Summary:	Linux driver for WLAN cards based on rtl8180
 Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych opartych na uk³adzie rtl8180
 Name:		kernel-net-rtl8180-sa2400
@@ -17,6 +17,7 @@ Group:		Base/Kernel
 License:	GPL
 Source0:	http://dl.sourceforge.net/rtl8180-sa2400/%{_rtl8180_name}-%{_rtl8180_ver}.tar.gz
 # Source0-md5:	11f24f693f9661a8bef0305ace663e4a
+Patch0:		%{name}-kernel-2.6.12.patch
 URL:		http://rtl8180-sa2400.sourceforge.net
 %if %{with kernel}
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 2.6.7}
@@ -58,6 +59,8 @@ Ten pakiet zawiera modu³ j±dra Linuksa SMP.
 
 %prep
 %setup -q -n %{_rtl8180_name}-%{_rtl8180_ver}
+
+%patch0 -p1
 
 %build
 # kernel module(s)
