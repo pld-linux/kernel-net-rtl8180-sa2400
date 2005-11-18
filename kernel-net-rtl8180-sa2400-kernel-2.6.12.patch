@@ -1,0 +1,57 @@
+diff -u rtl8180-0.21/Makefile26 rtl8180-0.21-new/Makefile26
+--- rtl8180-0.21/Makefile26	2005-02-27 19:48:48.000000000 +0100
++++ rtl8180-0.21-new/Makefile26	2005-11-18 01:59:21.189115048 +0100
+@@ -33,5 +33,5 @@
+ install: modules
+ 	mkdir -p $(MODDESTDIR)
+ 	mkdir -p $(MOD_ALGDESTDIR)
+-	install -p -m 644 r8180.ko ieee80211-r8180.ko ieee80211-r8180_crypt.ko $(MODDESTDIR)
++	install -p -m 644 r8180.ko ieee80211-r8180.ko ieee80211_crypt-r8180.ko $(MODDESTDIR)
+ 	install -p -m 644 ieee80211_crypt_wep-r8180.ko $(MOD_ALGDESTDIR)
+diff -u rtl8180-0.21/module_load rtl8180-0.21-new/module_load
+--- rtl8180-0.21/module_load	2005-01-10 18:09:39.000000000 +0100
++++ rtl8180-0.21-new/module_load	2005-11-18 01:59:24.505610864 +0100
+@@ -1,7 +1,8 @@
++depmod -ae
+ modprobe -v crc32 > /dev/null 2>&1
+ 
+-insmod ieee80211_crypt-r8180.ko
+-insmod ieee80211_crypt_wep-r8180.ko
+-insmod ieee80211-r8180.ko
+-insmod r8180.ko
++modprobe ieee80211_crypt-r8180
++modprobe ieee80211_crypt_wep-r8180
++modprobe ieee80211-r8180
++modprobe r8180
+ 
+diff -u rtl8180-0.21/r8180_core.c rtl8180-0.21-new/r8180_core.c
+--- rtl8180-0.21/r8180_core.c	2005-04-12 14:39:56.000000000 +0200
++++ rtl8180-0.21-new/r8180_core.c	2005-11-18 02:04:26.098761736 +0100
+@@ -3608,8 +3608,8 @@
+ 	pio_flags = (unsigned long)pci_resource_flags (pdev, 0);
+ 	
+ 	if (!(pio_flags & IORESOURCE_IO)) {
+-		DMESG("%s: region #0 not a PIO resource, aborting", 
+-		      pdev->slot_name);
++		DMESG("%02d.%d: region #0 not a PIO resource, aborting", 
++		      PCI_SLOT(pdev->devfn), PCI_FUNC(pdev->devfn));
+ 		goto fail;
+ 	}
+ 	
+@@ -3627,13 +3627,12 @@
+ 	pmem_start = pci_resource_start(pdev, 1);
+ 	pmem_len = pci_resource_len(pdev, 1);
+ 	pmem_flags = pci_resource_flags (pdev, 1);
+-	
+ 	if (!(pmem_flags & IORESOURCE_MEM)) {
+-		DMESG("%s: region #1 not a MMIO resource, aborting", 
+-		      pdev->slot_name);
++		DMESG("%02d.%d: region #1 not a MMIO resource, aborting", 
++		      PCI_SLOT(pdev->devfn), PCI_FUNC(pdev->devfn));
+ 		goto fail;
+ 	}
+-	
++        
+ 	DMESG("Memory mapped space @ 0x%08lx ", pmem_start);
+ 	if( ! request_mem_region(pmem_start, pmem_len, RTL8180_MODULE_NAME)) {
+ 		DMESG("request_mem_region failed!");
