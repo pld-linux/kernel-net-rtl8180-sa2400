@@ -7,7 +7,7 @@
 #
 %define		_rtl8180_ver	0.21
 %define		_rtl8180_name	rtl8180
-%define		_rel		4
+%define		_rel		5
 Summary:	Linux driver for WLAN cards based on rtl8180
 Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych opartych na uk³adzie rtl8180
 Name:		kernel-net-rtl8180-sa2400
@@ -68,20 +68,23 @@ for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}
 	if [ ! -r "%{_kernelsrcdir}/config-$cfg" ]; then
 		exit 1
 	fi
-	rm -rf include
-	install -d include/{linux,config}
-	ln -sf %{_kernelsrcdir}/config-$cfg .config
-	ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h include/linux/autoconf.h
-	ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
-	ln -sf %{_kernelsrcdir}/include/linux/version.h include/linux/version.h
-	ln -sf %{_kernelsrcdir}/Module.symvers-$cfg Module.symvers
-	touch include/config/MARKER
+	install -d o/include/linux
+	ln -sf %{_kernelsrcdir}/config-$cfg o/.config
+	ln -sf %{_kernelsrcdir}/Module.symvers-$cfg o/Module.symvers
+	ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h o/include/linux/autoconf.h
+%if %{with dist_kernel}
+	%{__make} -C %{_kernelsrcdir} O=$PWD/o prepare scripts
+%else
+	install -d o/include/config
+	touch o/include/config/MARKER
+	ln -sf %{_kernelsrcdir}/scripts o/scripts
+%endif
 	%{__make} -C %{_kernelsrcdir} clean \
 		RCS_FIND_IGNORE="-name '*.ko' -o" \
-		M=$PWD O=$PWD KSRC=$PWD\
+		M=$PWD O=$PWD/o KSRC=$PWD/o\
 		%{?with_verbose:V=1}
 	%{__make} -C %{_kernelsrcdir} modules \
-		M=$PWD O=$PWD KSRC=$PWD\
+		M=$PWD O=$PWD/o KSRC=$PWD/o\
 		%{?with_verbose:V=1}
 	for i in ieee80211-r8180 ieee80211_crypt-r8180 ieee80211_crypt_wep-r8180 \
 		r8180; do
