@@ -5,26 +5,25 @@
 %bcond_without	smp		# don't build SMP module
 %bcond_with	verbose		# verbose build (V=1)
 #
-%define		_rtl8180_ver	0.21
 %define		_rtl8180_name	rtl8180
 %define		_rel		5
 Summary:	Linux driver for WLAN cards based on rtl8180
 Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych opartych na uk³adzie rtl8180
 Name:		kernel-net-rtl8180-sa2400
-Version:	%{_rtl8180_ver}
+Version:	0.21
 Release:	%{_rel}@%{_kernel_ver_str}
-Group:		Base/Kernel
 License:	GPL
-Source0:	http://dl.sourceforge.net/rtl8180-sa2400/%{_rtl8180_name}-%{_rtl8180_ver}.tar.gz
+Group:		Base/Kernel
+Source0:	http://dl.sourceforge.net/rtl8180-sa2400/%{_rtl8180_name}-%{version}.tar.gz
 # Source0-md5:	11f24f693f9661a8bef0305ace663e4a
 Patch0:		%{name}-kernel-2.6.12.patch
 URL:		http://rtl8180-sa2400.sourceforge.net
 %if %{with kernel}
-%{?with_dist_kernel:BuildRequires:	kernel-module-build >= 2.6.7}
+%{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.7}
 %{?with_dist_kernel:%requires_releq_kernel_up}
+BuildRequires:	rpmbuild(macros) >= 1.153
 Requires(post,postun):	/sbin/depmod
 %{?with_dist_kernel:Requires(postun):	kernel}
-BuildRequires:	rpmbuild(macros) >= 1.153
 %endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -34,7 +33,8 @@ This is a Linux driver for WLAN cards based on rtl8180.
 This package contains Linux UP module.
 
 %description -l pl
-Sterownik dla Linuksa do kart bezprzewodowych opartych na uk³adzie rtl8180.
+Sterownik dla Linuksa do kart bezprzewodowych opartych na uk³adzie
+rtl8180.
 
 Ten pakiet zawiera modu³ j±dra Linuksa UP.
 
@@ -53,12 +53,13 @@ This is a Linux driver for WLAN cards based on rtl8180.
 This package contains Linux SMP module.
 
 %description -n kernel-smp-net-rtl8180 -l pl
-Sterownik dla Linuksa do kart bezprzewodowych opartych na uk³adzie rtl8180.
+Sterownik dla Linuksa do kart bezprzewodowych opartych na uk³adzie
+rtl8180.
 
 Ten pakiet zawiera modu³ j±dra Linuksa SMP.
 
 %prep
-%setup -q -n %{_rtl8180_name}-%{_rtl8180_ver}
+%setup -q -n %{_rtl8180_name}-%{version}
 
 %patch0 -p1
 
