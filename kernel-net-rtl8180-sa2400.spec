@@ -6,7 +6,7 @@
 %bcond_with	verbose		# verbose build (V=1)
 #
 %define		_rtl8180_name	rtl8180
-%define		_rel		5
+%define		_rel		6
 Summary:	Linux driver for WLAN cards based on rtl8180
 Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych opartych na uk³adzie rtl8180
 Name:		kernel-net-rtl8180-sa2400
