@@ -17,6 +17,7 @@ Group:		Base/Kernel
 Source0:	http://dl.sourceforge.net/rtl8180-sa2400/%{_rtl8180_name}-%{version}.tar.gz
 # Source0-md5:	11f24f693f9661a8bef0305ace663e4a
 Patch0:		%{name}-kernel-2.6.12.patch
+Patch01:	%{name}-module-params.patch
 URL:		http://rtl8180-sa2400.sourceforge.net
 %if %{with kernel}
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.7}
@@ -62,6 +63,7 @@ Ten pakiet zawiera modu³ j±dra Linuksa SMP.
 %setup -q -n %{_rtl8180_name}-%{version}
 
 %patch0 -p1
+%patch1 -p0
 
 %build
 # kernel module(s)
