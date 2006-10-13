@@ -9,22 +9,23 @@
 %define		_rel		6
 Summary:	Linux driver for WLAN cards based on rtl8180
 Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych opartych na uk³adzie rtl8180
-Name:		kernel-net-rtl8180-sa2400
+%define		_specname	kernel-net-rtl8180-sa2400
+Name:		kernel%{_alt_kernel}-net-rtl8180-sa2400
 Version:	0.21
 Release:	%{_rel}@%{_kernel_ver_str}
 License:	GPL
 Group:		Base/Kernel
 Source0:	http://dl.sourceforge.net/rtl8180-sa2400/%{_rtl8180_name}-%{version}.tar.gz
 # Source0-md5:	11f24f693f9661a8bef0305ace663e4a
-Patch0:		%{name}-kernel-2.6.12.patch
-Patch01:	%{name}-module-params.patch
+Patch0:		%{_specname}-kernel-2.6.12.patch
+Patch01:	%{_specname}-module-params.patch
 URL:		http://rtl8180-sa2400.sourceforge.net
 %if %{with kernel}
-%{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.7}
+%{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.7}
 %{?with_dist_kernel:%requires_releq_kernel_up}
 BuildRequires:	rpmbuild(macros) >= 1.153
 Requires(post,postun):	/sbin/depmod
-%{?with_dist_kernel:Requires(postun):	kernel}
+%{?with_dist_kernel:Requires(postun):	kernel%{_alt_kernel}}
 %endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -39,21 +40,21 @@ rtl8180.
 
 Ten pakiet zawiera modu³ j±dra Linuksa UP.
 
-%package -n kernel-smp-net-rtl8180
+%package -n kernel%{_alt_kernel}-smp-net-rtl8180
 Summary:	Linux SMP driver for WLAN cards based on rtl8180
 Summary(pl):	Sterownik dla Linuksa SMP do kart bezprzewodowych opartych na uk³adzie rtl8180
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 %{?with_dist_kernel:%requires_releq_kernel_smp}
 Requires(post,postun):	/sbin/depmod
-%{?with_dist_kernel:Requires(postun):	kernel-smp}
+%{?with_dist_kernel:Requires(postun):	kernel%{_alt_kernel}-smp}
 
-%description -n kernel-smp-net-rtl8180
+%description -n kernel%{_alt_kernel}-smp-net-rtl8180
 This is a Linux driver for WLAN cards based on rtl8180.
 
 This package contains Linux SMP module.
 
-%description -n kernel-smp-net-rtl8180 -l pl
+%description -n kernel%{_alt_kernel}-smp-net-rtl8180 -l pl
 Sterownik dla Linuksa do kart bezprzewodowych opartych na uk³adzie
 rtl8180.
 
@@ -121,10 +122,10 @@ rm -rf $RPM_BUILD_ROOT
 %postun
 %depmod %{_kernel_ver}
 
-%post -n kernel-smp-net-rtl8180
+%post -n kernel%{_alt_kernel}-smp-net-rtl8180
 %depmod %{_kernel_ver}smp
 
-%postun -n kernel-smp-net-rtl8180
+%postun -n kernel%{_alt_kernel}-smp-net-rtl8180
 %depmod %{_kernel_ver}smp
 
 %files
@@ -132,7 +133,7 @@ rm -rf $RPM_BUILD_ROOT
 /lib/modules/%{_kernel_ver}/misc/*.ko*
 
 %if %{with smp} && %{with dist_kernel}
-%files -n kernel-smp-net-rtl8180
+%files -n kernel%{_alt_kernel}-smp-net-rtl8180
 %defattr(644,root,root,755)
 /lib/modules/%{_kernel_ver}smp/misc/*.ko*
 %endif
