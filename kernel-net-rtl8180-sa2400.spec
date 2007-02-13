@@ -8,7 +8,7 @@
 %define		_rtl8180_name	rtl8180
 %define		_rel		6
 Summary:	Linux driver for WLAN cards based on rtl8180
-Summary(pl.UTF-8):   Sterownik dla Linuksa do kart bezprzewodowych opartych na układzie rtl8180
+Summary(pl.UTF-8):	Sterownik dla Linuksa do kart bezprzewodowych opartych na układzie rtl8180
 %define		_specname	kernel-net-rtl8180-sa2400
 Name:		kernel%{_alt_kernel}-net-rtl8180-sa2400
 Version:	0.21
@@ -42,7 +42,7 @@ Ten pakiet zawiera moduł jądra Linuksa UP.
 
 %package -n kernel%{_alt_kernel}-smp-net-rtl8180
 Summary:	Linux SMP driver for WLAN cards based on rtl8180
-Summary(pl.UTF-8):   Sterownik dla Linuksa SMP do kart bezprzewodowych opartych na układzie rtl8180
+Summary(pl.UTF-8):	Sterownik dla Linuksa SMP do kart bezprzewodowych opartych na układzie rtl8180
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 %{?with_dist_kernel:%requires_releq_kernel_smp}
