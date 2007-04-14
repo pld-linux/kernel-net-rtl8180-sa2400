@@ -1,0 +1,36 @@
+diff -upr rtl8180-0.21./ieee80211_crypt_wep.c rtl8180-0.21/ieee80211_crypt_wep.c
+--- rtl8180-0.21./ieee80211_crypt_wep.c	2005-04-12 12:25:42.000000000 +0000
++++ rtl8180-0.21/ieee80211_crypt_wep.c	2007-04-14 20:02:43.987802000 +0000
+@@ -29,6 +29,7 @@
+ 
+ #include <linux/crypto.h>
+ #include <asm/scatterlist.h>
++#include <asm/highmem.h>
+ #include <linux/crc32.h>
+ 
+ #if (LINUX_VERSION_CODE > KERNEL_VERSION(2,5,47))
+diff -upr rtl8180-0.21./r8180_core.c rtl8180-0.21/r8180_core.c
+--- rtl8180-0.21./r8180_core.c	2007-04-14 19:00:02.343658000 +0000
++++ rtl8180-0.21/r8180_core.c	2007-04-14 20:02:20.519542000 +0000
+@@ -2641,7 +2641,7 @@ short rtl8180_init(struct net_device *de
+ 	spin_lock_init(&priv->tx_lock);
+ 	sema_init(&priv->wx_sem,1);
+ 	priv->workqueue = create_workqueue(DRV_NAME);
+-	INIT_WORK(&priv->IBSS_work,(void(*)(void*)) rtl8180_IBSS_create_wq,dev);
++	INIT_WORK(&priv->IBSS_work, rtl8180_IBSS_create_wq);
+ 	
+ 	tasklet_init(&priv->irq_rx_tasklet,
+ 		     (void(*)(unsigned long)) rtl8180_irq_rx_tasklet,
+@@ -3670,7 +3670,12 @@ static int __devinit rtl8180_pci_probe(s
+ 	dev->do_ioctl = do_ioctl;
+ 	dev->set_multicast_list = r8180_set_multicast;
+ 	dev->set_mac_address = r8180_set_mac_adr;
++#if WIRELESS_EXT >= 12
++#if WIRELESS_EXT < 17
+ 	dev->get_wireless_stats = r8180_get_wireless_stats;
++#endif
++	dev->wireless_handlers = (struct iw_handler_def *) &r8180_wx_handlers_def;
++#endif
+ 	dev->type=ARPHRD_ETHER;
+ 	
+ 	if (dev_alloc_name(dev, ifname) < 0){
