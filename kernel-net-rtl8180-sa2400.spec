@@ -38,9 +38,9 @@ rtl8180.
 
 %prep
 %setup -q -n %{_rtl8180_name}-%{version}
-%patch0 -p1
-%patch1 -p0
-%patch2 -p1
+%patch -P0 -p1
+%patch -P1 -p0
+%patch -P2 -p1
 
 cat > Makefile << EOF
 obj-m += r8180.o ieee80211-r8180.o ieee80211_crypt-r8180.o ieee80211_crypt_wep-r8180.o 
